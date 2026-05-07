@@ -37,8 +37,29 @@ services:
       - REACT_APP_API_URL=http://localhost:4000
     restart: unless-stopped
 
+  sonarqube:
+    image: sonarqube:community
+    container_name: kankuama-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+    networks:
+      - kankuama-network
+    restart: unless-stopped
+
 volumes:
   jenkins_home:
+    driver: local
+  sonarqube_data:
+    driver: local
+  sonarqube_logs:
+    driver: local
+  sonarqube_extensions:
     driver: local
 
 networks:

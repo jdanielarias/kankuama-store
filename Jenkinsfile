@@ -56,6 +56,28 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=kankuama-store \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://sonarqube:9000 \
+                        -Dsonar.token=${SONAR_AUTH_TOKEN}
+                    """
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 sh "docker build -t ${BACKEND_IMAGE} ./backend"
