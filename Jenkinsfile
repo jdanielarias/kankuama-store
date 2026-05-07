@@ -59,13 +59,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                        sonar-scanner \
-                        -Dsonar.projectKey=kankuama-store \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://sonarqube:9000 \
-                        -Dsonar.token=${SONAR_AUTH_TOKEN}
-                    """
+                    script {
+                        def scannerHome = tool 'SonarQube Scanner'
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=kankuama-store -Dsonar.sources=."
+                    }
                 }
             }
         }
