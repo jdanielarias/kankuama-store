@@ -1,0 +1,46 @@
+services:
+  jenkins:
+    build:
+      context: ./jenkins
+    container_name: kankuama-jenkins
+    ports:
+      - "8090:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - kankuama-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    container_name: kankuama-backend
+    ports:
+      - "4000:4000"
+    networks:
+      - kankuama-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: kankuama-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - kankuama-network
+    environment:
+      - REACT_APP_API_URL=http://localhost:4000
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
+    driver: local
+
+networks:
+  kankuama-network:
+    driver: bridge
