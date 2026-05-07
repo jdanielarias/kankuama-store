@@ -91,7 +91,7 @@ pipeline {
 
     post {
         always {
-            junit '**/test-results/*.xml'
+            junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
         }
         success {
             echo 'Deploy exitoso — Kankuama Store disponible en http://localhost:3000'
