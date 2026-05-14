@@ -16,6 +16,7 @@ services:
   backend:
     build:
       context: ./backend
+    image: kankuama-backend:latest
     container_name: kankuama-backend
     ports:
       - "4000:4000"
@@ -26,6 +27,7 @@ services:
   frontend:
     build:
       context: ./frontend
+    image: kankuama-frontend:latest
     container_name: kankuama-frontend
     ports:
       - "3000:3000"
