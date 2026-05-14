@@ -85,7 +85,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker compose -p kankuama-store down || true'
-                sh 'docker compose -p kankuama-store up -d'
+                sh 'docker compose -p kankuama-store up -d --no-build'
             }
         }
     }
